@@ -135,9 +135,9 @@ def direct(f, bounds, args=None, debug=False, maxiter=None, maxsample=None, maxt
         # split rectangle along longest side(s)
         maxlength = max([u-l for u, l in zip(rect.ub, rect.lb)])
         
-        if (debug): print '***** chop rectangle centered at', rect.center
+        if (debug): print('***** chop rectangle centered at', rect.center)
         I = []
-        for i in xrange(N):
+        for i in range(N):
             if rect.ub[i] - rect.lb[i] == maxlength:
                 s1 = copy(rect.center)
                 s2 = copy(rect.center)
@@ -147,7 +147,7 @@ def direct(f, bounds, args=None, debug=False, maxiter=None, maxsample=None, maxt
 
                 I.append((i, min(samplef(s1), samplef(s2))))
         I.sort(key=lambda x:x[1])
-        if (debug): print '      (along %d axes): %s' % (len(I), I)
+        if (debug): print('      (along %d axes): %s' % (len(I), I))
         
         oldrect = rect
         for i, _ in I:
@@ -216,7 +216,7 @@ def direct(f, bounds, args=None, debug=False, maxiter=None, maxsample=None, maxt
         # print '[direct] iteration %d, samples = %d' % (iteration, SAMPLES)
         iteration += 1
         if maxiter and iteration > maxiter:
-            if (debug): print 'Reached maximum iterations.'
+            if (debug): print('Reached maximum iterations.')
             return results()
             
         # find potentially optimal rectangles
@@ -255,28 +255,26 @@ def direct(f, bounds, args=None, debug=False, maxiter=None, maxsample=None, maxt
                     if Rj.y <= Rj.d * minI2:
                         potopts.append(Rj)
                 elif epsilon <= (FMIN[0]-Rj.y)/abs(FMIN[0]) + (Rj.d/abs(FMIN[0])) * minI2:
-                    
-                    
                     potopts.append(Rj)
             
             if maxtime and time()-tic >= maxtime:
                 # return without further dividing
-                if (debug): print 'Reached maximum time.'
+                if (debug): print('Reached maximum time.')
                 return results()
             
         
         for Rj in potopts:
             divrec(Rj)
             if maxsample and SAMPLES >= maxsample:
-                if (debug): print 'Reached maximum samples'
+                if (debug): print('Reached maximum samples')
                 fminevol.append(FMIN)
                 return results()
             if maxtime and time()-tic>= maxtime:
-                if (debug): print 'Reached maximum time'
+                if (debug): print('Reached maximum time')
                 fminevol.append(FMIN)
                 return results()
         
-        if (debug): print '[%.3fs] iteration %d: %d potentially optimal rectangles divided. Total samples = %s.  FMIN = %s' % (time()-tic, iteration, len(potopts), SAMPLES, FMIN)
+        if (debug): print('[%.3fs] iteration %d: %d potentially optimal rectangles divided. Total samples = %s.  FMIN = %s' % (time()-tic, iteration, len(potopts), SAMPLES, FMIN))
         fminevol.append(FMIN)
 
 
@@ -287,24 +285,24 @@ def debugRectangles(rects):
     # first, are any out of bounds?
     for r in rects:
         if r.lb[0] < 0. or r.lb[1] < 0.:
-            print "ERROR: rectangle has lb", r.lb
+            print("ERROR: rectangle has lb", r.lb)
         if r.ub[0] > 1. or r.ub[1] > 1.:
-            print "ERROR: rectangle has ub", r.ub
+            print("ERROR: rectangle has ub", r.ub)
         if r.lb[0] > r.ub[0] or r.lb[1] > r.ub[1]:
-            print 'ERROR: lower bound greater than upper'
+            print('ERROR: lower bound greater than upper')
         assert r.center == [l+(u-l)/2. for u, l in zip(r.lb, r.ub)]
         assert r.d == sum([(l-c)**2. for l, c in zip(r.lb, r.center)])**0.5
         
     
     # okay, now sample
-    for _ in xrange(10000):
+    for _ in range(10000):
         hits = 0
         samp = random_sample(2)
         for r in rects:
             if all(samp > r.lb) and all(samp < r.ub):
                 hits += 1
         if hits != 1:
-            print "ERROR: location has %d hits: %s" % (hits, samp)
+            print("ERROR: location has %d hits: %s" % (hits, samp))
 
 
 def cdirect(f, bounds, args=None, maxiter=10, maxtime=10, maxsample=200000, **kwargs):
@@ -323,7 +321,7 @@ def cdirect(f, bounds, args=None, maxiter=10, maxtime=10, maxsample=200000, **kw
     N = len(bounds)
     
     def objective(n, x):
-        X = array([x[i] for i in xrange(n)])
+        X = array([x[i] for i in range(n)])
         y = f(X, *args)
         # print '[python] sampling', X, '=', y
         return y
@@ -365,15 +363,15 @@ def demoCDIRECT(maxiter=25):
 
     bounds = [(1.2, 28.), (0.1, 13.)]
     optv, optx = cdirect(foo, bounds, maxiter=maxiter)
-    print '***** opt val =', optv
-    print '***** opt x   =', optx
+    print('***** opt val =', optv)
+    print('***** opt x   =', optx)
     
     plt.figure(2)
     plt.clf()
     
     # plot rectangles
-    c0 = [(i/100.)*(bounds[0][1]-bounds[0][0])+bounds[0][0] for i in xrange(101)]
-    c1 = [(i/100.)*(bounds[1][1]-bounds[1][0])+bounds[1][0] for i in xrange(101)]
+    c0 = [(i/100.)*(bounds[0][1]-bounds[0][0])+bounds[0][0] for i in range(101)]
+    c1 = [(i/100.)*(bounds[1][1]-bounds[1][0])+bounds[1][0] for i in range(101)]
     z = array([[foo([i, j]) for i in c0] for j in c1])
     
     ax = plt.subplot(111)
@@ -415,8 +413,8 @@ def demoDIRECT(maxiter=25):
     plt.clf()
     
     # plot rectangles
-    c0 = [(i/50.)*(bounds[0][1]-bounds[0][0])+bounds[0][0] for i in xrange(51)]
-    c1 = [(i/50.)*(bounds[1][1]-bounds[1][0])+bounds[1][0] for i in xrange(51)]
+    c0 = [(i/50.)*(bounds[0][1]-bounds[0][0])+bounds[0][0] for i in range(51)]
+    c1 = [(i/50.)*(bounds[1][1]-bounds[1][0])+bounds[1][0] for i in range(51)]
     z = array([[foo([i, j]) for i in c0] for j in c1])
     
     ax = plt.subplot(111)
@@ -447,6 +445,3 @@ def demoDIRECT(maxiter=25):
 
 if __name__ == "__main__":
     demoDIRECT()
-    
-    
-    

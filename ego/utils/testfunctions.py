@@ -28,8 +28,6 @@ Created by Eric on 2009-12-28.
 
 Functions used for testing optimizations.
 """
-from __future__ import division
-
 import unittest
 
 from numpy import *
@@ -494,10 +492,10 @@ class Synthetic(TestFunction):
         start = self.GP.X[argmin(self.GP.Y)]
         xopt = fmin_bfgs(self.GP.mu, start, disp=False)
         
-        print "\t[synthetic] optimization started at %s, ended at %s" % (start, xopt)
+        print("\t[synthetic] optimization started at %s, ended at %s" % (start, xopt))
         
         if xstar is not None:
-            print '\t[synthetic] realigning minimum'
+            print('\t[synthetic] realigning minimum')
             # now, align minimum with what we specified
             for i, (target, origin) in enumerate(zip(xstar, xopt)):
                 self.GP.X[:,i] += target-origin
@@ -507,9 +505,7 @@ class Synthetic(TestFunction):
         self.minimum = self.GP.mu(xopt)
         self.xstar = xopt
         
-        # print self.GP.X
-        # print self.GP.Y
-        print '\t[synthetic] x+ = %s, f(x+) = %.3f' % (self.xstar, self.f(self.xstar))
+        print('\t[synthetic] x+ = %s, f(x+) = %.3f' % (self.xstar, self.f(self.xstar)))
             
             
     def f(self, x):
@@ -547,12 +543,12 @@ def checkMinimum(testfuncs):
     """
     for tf in testfuncs:
         argmin = fmin_bfgs(tf.f, tf.argmin)
-        print '[%s] was told argmin = %s, min = %.2f' % (tf.name, tf.argmin, tf.minimum)
-        print '[%s] check argmin = %s, min = %.2f' % (tf.name, tf.argmin, tf.f(tf.argmin))
-        print '[%s] found argmin = %s, min = %.2f' % (tf.name, argmin, tf.f(argmin))
+        print('[%s] was told argmin = %s, min = %.2f' % (tf.name, tf.argmin, tf.minimum))
+        print('[%s] check argmin = %s, min = %.2f' % (tf.name, tf.argmin, tf.f(tf.argmin)))
+        print('[%s] found argmin = %s, min = %.2f' % (tf.name, argmin, tf.f(argmin)))
         for x in lhcSample(tf.bounds, 100):
             if tf.f(x) < tf.minimum:
-                print 'sample x = %s, y = %.4f is lower than minimum %.4f' % (x, tf.f(x), tf.minimum)
+                print('sample x = %s, y = %.4f is lower than minimum %.4f' % (x, tf.f(x), tf.minimum))
         
         
 def plot2D(tf):
@@ -592,7 +588,7 @@ if __name__=="__main__":
         assert len(hp)==1
         vals.append((tf.name, hp[0]))
     
-    print '\nRESULTS:'
+    print('\nRESULTS:')
     for name, hp in vals:
-        print '%s\t%.4f' % (name, hp)
+        print('%s\t%.4f' % (name, hp))
     

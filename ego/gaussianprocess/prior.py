@@ -103,17 +103,17 @@ class RBFNMeanPrior(GPMeanPrior):
     
         NX, _ = X.shape
     
-        r = range(NX)
+        r = list(range(NX))
         rs.shuffle(r)
         means = X[r[:k]]
     
-        for _ in xrange(10):
+        for _ in range(10):
             # assign each cluster to closest mean
             C = [argmin([linalg.norm(m-x) for m in means]) for x in X]
         
             # means become centroids of their clusters
             means = []
-            for j in xrange(k):
+            for j in range(k):
                 clust = [x for x, c in zip(X, C) if c==j]
                 if len(clust)==0:
                     # for empty clusters, restart centered on a random datum
@@ -132,7 +132,7 @@ class RBFNMeanPrior(GPMeanPrior):
                 invK = linalg.inv(matrix(kernel.covMatrix(X)) + eye(NX)*reg) # add regularizer
             except LinAlgError:
                 reg *= 2
-                print 'LinAlgError: increase regularizer to %f' % reg
+                print('LinAlgError: increase regularizer to %f' % reg)
             else:
                 break
                 

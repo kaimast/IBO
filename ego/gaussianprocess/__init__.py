@@ -120,16 +120,6 @@ class GaussianProcess(object):
         self.selected = None
         self.endtime = None
         
-        # if prior is None:
-        #     print 'prior is None'
-        # else:
-        #     print 'prior is NOT None'
-        #     
-        # if self.prior is None:
-        #     print 'self.prior is None'
-        # else:
-        #     print 'self.prior is NOT None'
-        
         
     def _computeCorrelations(self, X):
         """ compute correlations between data """
@@ -138,12 +128,12 @@ class GaussianProcess(object):
         r = eye(N, dtype=float) + self.noise
         m = empty((M,N))
         
-        for i in xrange(N):
-            for j in xrange(i): 
+        for i in range(N):
+            for j in range(i): 
                 r[i,j] = r[j,i] = self.kernel.cov(X[i], X[j])
                 
-        for i in xrange(M):
-            for j in xrange(N): 
+        for i in range(M):
+            for j in range(N): 
                 m[i,j] = self.kernel.cov(self.X[i], X[j])
                 
         return r, m
@@ -155,12 +145,12 @@ class GaussianProcess(object):
         r = eye(N, dtype=float) + self.noise
         m = empty((M,N))
         
-        for i in xrange(N):
-            for j in xrange(i): 
+        for i in range(N):
+            for j in range(i): 
                 r[i,j] = r[j,i] = self.kernel.cov(X[i], X[j])
                 
-        for i in xrange(M):
-            for j in xrange(N): 
+        for i in range(M):
+            for j in range(N): 
                 m[i,j] = self.kernel.cov(self.augX[i], X[j])
                 
         return r, m
@@ -192,15 +182,15 @@ class GaussianProcess(object):
             # NO GRADIENT DATA.
             d = self.Y-m
             r = empty((M, N))
-            for i in xrange(M):
-                for j in xrange(N): 
+            for i in range(M):
+                for j in range(N): 
                     r[i,j] = self.kernel.cov(self.X[i], X[j])
         else:
             # WITH GRADIENT DATA.
             d = hstack(map(hstack, zip(self.Y-m, self.G)))
             r = empty((M*(D+1), N))
-            for i in xrange(M):
-                for j in xrange(N):
+            for i in range(M):
+                for j in range(N):
                     A = i*(D+1)
                     cov = self.kernel.covWithGradients(self.X[i], X[j])
                     r[A:A+D+1,j] = cov[:,0]
@@ -216,8 +206,8 @@ class GaussianProcess(object):
             else:
                 M, (N,D) = len(self.augX), X.shape
                 r = empty((M, N))
-                for i in xrange(M):
-                    for j in xrange(N): 
+                for i in range(M):
+                    for j in range(N): 
                         r[i,j] = self.kernel.cov(self.augX[i], X[j])
                 Lr = linalg.solve(self.augL, r)
                 sigma2 = (1 + self.noise) - sum(Lr**2, axis=0)
@@ -259,8 +249,6 @@ class GaussianProcess(object):
         needed occasionally for optimization
         """
         nm = -self.mu(x)
-        # if self.prior is not None and len(self.X)==0:
-        #     print 'no data, using prior = %.4f'%nm
         return nm
         
         
@@ -278,8 +266,6 @@ class GaussianProcess(object):
 
         assert len(Y) == len(X), 'wrong number of Y-observations given'
         assert G is None or G.shape == X.shape, 'wrong number (or dimensionality) of gradient-observations given'
-        # print '(', len(self.X), self.G, G, ')'
-        # assert not (len(self.X) > 0 and self.G is not None and G is None), 'gradients must either be always or never given'
 
         # this just makes sure that if we used the default gradient noise for
         # each dimension it gets lengthened to the proper size.
@@ -306,7 +292,6 @@ class GaussianProcess(object):
             z = linalg.solve(self.L, m)
             d = linalg.cholesky(r - dot(z.T, z))
             self.L = r_[c_[self.L, zeros(z.shape)], c_[z.T, d]]
-        # print '\nself.G =', G, ', for which selfG is None is', (self.G is None)
             
             
     def getYfromX(self, qx):
@@ -380,9 +365,8 @@ class PrefGaussianProcess(GaussianProcess):
             Lx = linalg.solve(L, x)
             val = -logCDFs + dot(Lx, Lx)/2
             if not isfinite(val):
-                print 'non-finite val!'
+                print('non-finite val!')
                 pdb.set_trace()
-            # print '\n***** val =', val
             return val
 
         # add new preferences
@@ -460,8 +444,8 @@ class PrefGaussianProcess(GaussianProcess):
         # now we can learn the C matrix
         self.C = eye(len(self.X), dtype=float) * 5
         # self.C = zeros((len(self.X), len(self.X)))
-        for i in xrange(len(self.X)):
-            for j in xrange(len(self.X)):
+        for i in range(len(self.X)):
+            for j in range(len(self.X)):
                 for r, c, _ in self.preferences:
                     # print '******', r,c
                     alpha = 0
@@ -487,13 +471,13 @@ class PrefGaussianProcess(GaussianProcess):
         try:
             self.L = linalg.cholesky(self.R+linalg.inv(self.C))
         except LinAlgError:
-            print '[addPreferences] GP.C matrix is ill-conditioned, adding regularizer delta = 1'
+            print('[addPreferences] GP.C matrix is ill-conditioned, adding regularizer delta = 1')
             for i in xrange(10):
                 self.C += eye(len(self.X))
                 try:
                     self.L = linalg.cholesky(self.R+linalg.inv(self.C))
                 except LinAlgError:
-                    print '[addPreferences] GP.C matrix is ill-conditioned, adding regularizer delta = %d' % (i+2)
+                    print('[addPreferences] GP.C matrix is ill-conditioned, adding regularizer delta = %d' % (i+2))
                 else:
                     break
                     

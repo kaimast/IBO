@@ -572,7 +572,6 @@ extern "C" const double* direct(objective_t objective, int ndim, double* lb, dou
     delete D;
     
     if (DEBUG) cout << "[cdirect] DIRECT destructed" << endl;
-    if (DEBUG) cout << "[cdirect] s = " << s << endl;
     if (DEBUG) cout << "[cdirect] s.str() = " << s.str() << endl;
     if (DEBUG) cout << "[cdirect] s.str().c_str() = " << s.str().c_str() << endl;
     

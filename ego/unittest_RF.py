@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # encoding: utf-8
 
 # Copyright (C) 2010, 2011 by Eric Brochu
@@ -21,11 +21,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""
-unittest_RF.py
-"""
-from __future__ import division
-
 import unittest
 from copy import deepcopy
 
@@ -47,7 +42,6 @@ from utils.testfunctions import Poly4, Poly6, Schubert1, GoldsteinPrice, Shekel5
 class TestRandomForest(unittest.TestCase):
         
     def testOneTree(self):
-        
         forest = RandomForest(ntrees=1, m=4, ndata=2, pRetrain=.2)
         self.failUnlessEqual(forest.ntrees, 1)
         self.failUnlessEqual(forest.m, 4)
@@ -63,7 +57,6 @@ class TestRandomForest(unittest.TestCase):
         # checkTree(forest.forest[0])
 
         # maximizeEI(forest, tf.bounds)
-        # print forest.forest[0]
         
         if False:
             figure(1, figsize=(5,10))
@@ -99,7 +92,7 @@ class TestRandomForest(unittest.TestCase):
         Y = [tf.f(x) for x in X]
         RF.addData(X, Y)
         mu, sigma = RF.posterior(ones(len(tf.bounds))*.4)
-        print '[python] = 0.4 x 2, mu =', mu, '  sigma =', sigma
+        print('[python] = 0.4 x 2, mu =', mu, '  sigma =', sigma)
         
         pif1 = PI(RF)
         dopt1, doptx1 = direct(pif1.negf, tf.bounds, maxiter=10)
@@ -181,9 +174,9 @@ class TestRandomForest(unittest.TestCase):
             rmse100 += (RF100.mu(testx)-testy)**2
         
         # this isn't consistent, since random forests are, you know, random
-        print 'RMSE 1 = %.4f'%(rmse1/nsamp)
-        print 'RMSE 10 = %.4f'%(rmse10/nsamp)
-        print 'RMSE 100 = %.4f'%(rmse100/nsamp)
+        print('RMSE 1 = %.4f'%(rmse1/nsamp))
+        print('RMSE 10 = %.4f'%(rmse10/nsamp))
+        print('RMSE 100 = %.4f'%(rmse100/nsamp))
         
         self.failUnless(rmse1 > rmse100)
     

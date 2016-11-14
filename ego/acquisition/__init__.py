@@ -81,7 +81,7 @@ def maximizeUCB(model, bounds, delta=0.1, scale=0.2, useCDIRECT=True, maxiter=50
     [Srinivas 2009a].
     """
     if not useCDIRECT:
-        print 'using DIRECT'
+        print('using DIRECT')
         ucb = UCB(model, len(bounds), delta=delta, scale=scale, **kwargs)
         opt, optx = direct(ucb.negf, bounds, **kwargs)
         return -opt, optx
@@ -119,7 +119,7 @@ def maximizePI(model, bounds, xi=0.01, maxiter=50, maxtime=30, maxsample=10000, 
     Maximize the probability of improvement, as described in [Lizotte 2008].
     """
     if not useCDIRECT:
-        print 'using DIRECT'
+        print('using DIRECT')
         pi = PI(model, xi, **kwargs)
         opt, optx = direct(pi.negf, bounds, maxiter=maxiter, maxtime=maxtime, maxsample=maxsample, **kwargs)
         return -opt, optx
@@ -160,7 +160,7 @@ class EI(object):
         EI = (ydiff * CDF(Z)) + (s * PDF(Z))
         if EI is nan:
             return 0.
-        # print '[python] EI =', EI
+        
         return -EI
     
 
@@ -185,7 +185,7 @@ def maximizeEI(model, bounds, useCDIRECT=True, xi=0.01, maxiter=50, maxtime=30, 
         3.  Otherwise, the Python implementation of DIRECT will be used.
     """
     if not useCDIRECT:
-        print 'using DIRECT'
+        print('using DIRECT')
         ei = EI(model, xi, **kwargs)
         opt, optx = direct(ei.negf, bounds, maxiter=maxiter, maxtime=maxtime, maxsample=maxsample, **kwargs)
         return -opt, optx
@@ -256,8 +256,6 @@ def cdirectRF(model, bounds, maxiter, maxtime, maxsample, acqfunc=None, xi=-1, b
     else:
         raise NotImplementedError('unknown acquisition function %s'%acqfunc)
     
-    # for i, n in enumerate(nodes): 
-    #     print i, ':', n.feature, n.value, n.label, n.leftChild, n.rightChild
     
     c_lower = array([b[0] for b in bounds], dtype=c_double)
     c_upper = array([b[1] for b in bounds], dtype=c_double)
@@ -300,7 +298,6 @@ def cdirectRF(model, bounds, maxiter, maxtime, maxsample, acqfunc=None, xi=-1, b
     opt = -result[0]
     optx = array([x for x in result[1:len(bounds)+1]])
 
-    # print 'Random Forest optimization returned ', opt, optx
     return opt, optx
     
 
@@ -327,7 +324,7 @@ def cdirectGP(model, bounds, maxiter, maxtime, maxsample, acqfunc=None, xi=-1, b
         elif isinstance(model.kernel, MaternKernel3):
             kerneltype = 2
         elif isinstance(model.kernel, MaternKernel5):
-            print 'Matern 5'
+            print('Matern 5')
             kerneltype = 3
         else:
             raise NotImplementedError('kernel not implemented in C++: %s'%model.kernel.__class__)
@@ -338,7 +335,7 @@ def cdirectGP(model, bounds, maxiter, maxtime, maxsample, acqfunc=None, xi=-1, b
                 if os.path.exists(lp):
                     lpath = lp
         if lpath is None:
-            print '\n[python] could not find ego library!  Did you forget to export DYLD_LIBRARY_PATH?'
+            print('\n[python] could not find ego library!  Did you forget to export DYLD_LIBRARY_PATH?')
         lib = cdll[lpath]
         lib.acqmaxGP.restype = POINTER(c_double)
         lib.acqmaxGP.argtypes = [c_int, 
@@ -448,11 +445,11 @@ def cdirectGP(model, bounds, maxiter, maxtime, maxsample, acqfunc=None, xi=-1, b
         
     except:
         try:
-            print '[python] C++ MaxEI implementation unavailable, attempting C++ DIRECT on Python objective function.'
+            print('[python] C++ MaxEI implementation unavailable, attempting C++ DIRECT on Python objective function.')
             opt, optx = cdirect(ei.negf, bounds, maxiter=maxiter, maxtime=maxtime, maxsample=maxsample, **kwargs)
         except:
             # couldn't access cDIRECT, use Python DIRECT
-            print '[python] C++ DIRECT unavailable, attempting Python DIRECT'
+            print('[python] C++ DIRECT unavailable, attempting Python DIRECT')
             opt, optx = direct(ei.negf, bounds, maxiter=maxiter, maxtime=maxtime, maxsample=maxsample, **kwargs)
         opt = -opt
     

@@ -20,8 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from __future__ import division
-
 from time import asctime
 
 from matplotlib.pylab import *
@@ -59,16 +57,16 @@ def marginalLikelihood(kernel, X, Y, nhyper, computeGradient=True, useCholesky=T
         try:
             L = cholesky(K)
             alpha = solve(L.T, solve(L, Y))
-        except LinAlgError, e:
-            print '\n ================ error in matrix'
-            print '\thyper =', kernel.hyperparams
-            print '===================================='
+        except LinAlgError as e:
+            print('\n ================ error in matrix')
+            print('\thyper =', kernel.hyperparams)
+            print('====================================')
             logBadParams(kernel)
             pdb.set_trace()
         nlml = 0.5 * dot(Y, alpha) + sum(log(diag(L))) + 0.5 * NX * log(2.0*pi)
         if computeGradient:
             W = solve(L.T, solve(L, eye(NX))) - outer(alpha, alpha)
-            dnlml = array([sum(W*kernel.derivative(X, i)) / 2.0 for i in xrange(nhyper)])
+            dnlml = array([sum(W*kernel.derivative(X, i)) / 2.0 for i in range(nhyper)])
             # print '  loglik =', nlml, '   d loglik =', dnlml
             return nlml, dnlml
         else:
@@ -78,10 +76,10 @@ def marginalLikelihood(kernel, X, Y, nhyper, computeGradient=True, useCholesky=T
         try:
             invK = inv(K)
             alpha = dot(invK, Y)
-        except LinAlgError, e:
-            print '\n ================ error in matrix'
-            print '\thyper =', kernel.hyperparams
-            print '===================================='
+        except LinAlgError as e:
+            print('\n ================ error in matrix')
+            print('\thyper =', kernel.hyperparams)
+            print('====================================')
             logBadParams(kernel)
             raise
 
@@ -89,7 +87,7 @@ def marginalLikelihood(kernel, X, Y, nhyper, computeGradient=True, useCholesky=T
         lml = -0.5 * dot(Y, alpha) - .5 * log(det(K)) - 0.5 * NX * log(2.0*pi)
         if computeGradient:
             W = invK - outer(alpha, alpha)
-            dnlml = array([sum(W*kernel.derivative(X, i)) / 2.0 for i in xrange(nhyper)])
+            dnlml = array([sum(W*kernel.derivative(X, i)) / 2.0 for i in range(nhyper)])
             return -lml, dnlml
         else:
             return -lml
@@ -108,10 +106,10 @@ def nlml(loghyper, kernel, X, Y, *args):
     k = kernel(exp(loghyper))
     try:
         ml = marginalLikelihood(k, X, Y, len(loghyper), computeGradient=False)
-    except LinAlgError, e:
-        print e
+    except LinAlgError as e:
+        print(e)
         ml = 100
-        print 'returning nlml = 100'
+        print('returning nlml = 100')
     return ml
     
 

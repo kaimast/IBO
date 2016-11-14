@@ -1,4 +1,4 @@
-#!python
+#! /usr/bin/python3
 
 # Copyright (C) 2010, 2011 by Eric Brochu
 # 
@@ -19,11 +19,6 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-
-"""
-Unittests for the EGO module go here.
-"""
-from __future__ import division
 
 import unittest
 from math import sin
@@ -62,7 +57,7 @@ class TestLatinhypercube(unittest.TestCase):
         self.assertEqual(isamp, range(100))
         
         # test 100D case
-        samples = lhcSample([(i*10., (i+1.)*10.) for i in xrange(100)], 10, seed=21)
+        samples = lhcSample([(i*10., (i+1.)*10.) for i in range(100)], 10, seed=21)
         for s in samples:
             self.assertEqual(len(s), 100)
             for i, x in enumerate(s):
@@ -305,7 +300,7 @@ class TestMaximizeEI(unittest.TestCase):
         if False:
             figure(1)
             plot(X, Y, 'ro')
-            plot([x/100 for x in xrange(100)], [GP.ei(x/100) for x in xrange(100)])
+            plot([x/100 for x in range(100)], [GP.ei(x/100) for x in range(100)])
             plot(maxei[1][0], maxei[0], 'ko')
             show()
         
@@ -323,14 +318,14 @@ class TestMaximizeEI(unittest.TestCase):
         
         if False:
             figure(1)
-            c0 = [(i/100.)*(bounds[0][1]-bounds[0][0])+bounds[0][0] for i in xrange(101)]
-            c1 = [(i/100.)*(bounds[1][1]-bounds[1][0])+bounds[1][0] for i in xrange(101)]
+            c0 = [(i/100.)*(bounds[0][1]-bounds[0][0])+bounds[0][0] for i in range(101)]
+            c1 = [(i/100.)*(bounds[1][1]-bounds[1][0])+bounds[1][0] for i in range(101)]
             z = array([[GP.ei(array([i, j])) for i in c0] for j in c1])
 
             ax = plt.subplot(111)
             ax.contour(c0, c1, z, 10, alpha=0.5, cmap=cm.Blues_r)
             plot([x[0] for x in X], [x[1] for x in X], 'ro')
-            for i in xrange(len(X)):
+            for i in range(len(X)):
                 annotate('%2f'%Y[i], X[i])
             plot(maxei[1][0], maxei[1][1], 'ko')
             show()
@@ -349,14 +344,14 @@ class TestMaximizeEI(unittest.TestCase):
         
         if False:
             figure(1)
-            c0 = [(i/50.)*(bounds[0][1]-bounds[0][0])+bounds[0][0] for i in xrange(51)]
-            c1 = [(i/50.)*(bounds[1][1]-bounds[1][0])+bounds[1][0] for i in xrange(51)]
+            c0 = [(i/50.)*(bounds[0][1]-bounds[0][0])+bounds[0][0] for i in range(51)]
+            c1 = [(i/50.)*(bounds[1][1]-bounds[1][0])+bounds[1][0] for i in range(51)]
             z = array([[GP.ei(array([i, j])) for i in c0] for j in c1])
 
             ax = plt.subplot(111)
             cs = ax.contour(c0, c1, z, 10, alpha=0.5, cmap=cm.Blues_r)
             plot([x[0] for x in X], [x[1] for x in X], 'ro')
-            for i in xrange(len(X)):
+            for i in range(len(X)):
                 annotate('%2f'%Y[i], X[i])
             plot(maxei[1][0], maxei[1][1], 'ko')
             show()
@@ -375,10 +370,6 @@ class TestMaximizeEI(unittest.TestCase):
                    # MaternKernel5([hv, 1.0])]
 
         for kernel in testkernels:
-            # print
-            # print kernel.__class__
-            
-        
             # train GPs
             X = lhcSample(S5.bounds, 10, seed=0)
             Y = [S5.f(x) for x in X]
@@ -389,9 +380,6 @@ class TestMaximizeEI(unittest.TestCase):
             dopt, doptx = direct(eif.negf, S5.bounds, maxiter=10)
             copt, coptx = cdirect(eif.negf, S5.bounds, maxiter=10)
             mopt, moptx = maximizeEI(GP, S5.bounds, maxiter=10)
-            # print dopt, doptx
-            # print copt, coptx
-            # print mopt, moptx
         
             self.failUnlessAlmostEqual(dopt, copt, 4)
             self.failUnlessAlmostEqual(-dopt, mopt, 4)
@@ -561,21 +549,19 @@ class TestMaximizeEI(unittest.TestCase):
 
         self.failUnlessAlmostEqual(-copt, mopt, 2)
         
-        for i in xrange(len(GP.X)):
+        for i in range(len(GP.X)):
             self.failUnless(all(valX[i]==GP.X[i]))
             self.failUnless(valY[i]==GP.Y[i])
         
         GP.prior.mu(GP.X[0])
         self.failUnless(all(valX[0]==GP.X[0]))
-        # print GP.X
         
-        for i in xrange(len(GP.X)):
+        for i in range(len(GP.X)):
             self.failUnless(all(valX[i]==GP.X[i]))
             self.failUnless(valY[i]==GP.Y[i])
         
         GP.prior.mu(GP.X[0])
         self.failUnless(all(valX[0]==GP.X[0]))
-        # print GP.X
         
 
     def testPriorAndPrefs(self):
@@ -592,12 +578,12 @@ class TestMaximizeEI(unittest.TestCase):
         gkernel = GaussianKernel_ard(hyper)
         GP = PrefGaussianProcess(gkernel, prior=prior)
         
-        X = [array([i+.5]*4) for i in xrange(5)]
+        X = [array([i+.5]*4) for i in range(5)]
         valX = [x.copy() for x in X]
         
         prefs = []
-        for i in xrange(len(X)):
-            for j in xrange(i):
+        for i in range(len(X)):
+            for j in range(i):
                 if S5.f(X[i]) > S5.f(X[j]):
                     prefs.append((X[i], X[j], 0))
                 else:
@@ -656,8 +642,6 @@ class TestDataprior(unittest.TestCase):
         RBNError = mean([(foo(x)-prior.mu(x))**2 for x in S])
         baselineError = mean([foo(x)**2 for x in S])
         
-        # print '\nRBN err  =', RBNError
-        # print 'baseline =', baselineError
         self.failUnless(RBNError < baselineError)
         
         
@@ -685,9 +669,6 @@ class TestDataprior(unittest.TestCase):
 
         nopriorErr = mean([(foo(x)-GPnoprior.mu(x))**2 for x in S])
         priorErr = mean([(foo(x)-GP.mu(x))**2 for x in S])
-        
-        # print '\nno prior Err =', nopriorErr
-        # print 'prior Err =', priorErr
         
         self.failUnless(priorErr < nopriorErr*.5)
         
@@ -724,8 +705,6 @@ class TestDataprior(unittest.TestCase):
         nopriorErr = mean([(S5.f(x)-nopriorGP.mu(x))**2 for x in S])
         priorErr = mean([(S5.f(x)-priorGP.mu(x))**2 for x in S])
         
-        # print '\nno prior Err =', nopriorErr
-        # print 'prior Err =', priorErr
         self.failUnless(priorErr < nopriorErr*.8)
         
         
@@ -765,7 +744,6 @@ class TestDataprior(unittest.TestCase):
         
         GP.prior.mu(GP.X[0])
         self.failUnless(all(valX[0]==GP.X[0]))
-        # print GP.X
         
         for i in xrange(len(GP.X)):
             self.failUnless(all(valX[i]==GP.X[i]))
@@ -773,7 +751,6 @@ class TestDataprior(unittest.TestCase):
         
         GP.prior.mu(GP.X[0])
         self.failUnless(all(valX[0]==GP.X[0]))
-        # print GP.X
         
         
 
@@ -821,7 +798,7 @@ class TestTestFunctions(unittest.TestCase):
         for TestFunction in TestFunctions:
             tf = TestFunction(maximize=False)
             opt, _ = cdirect(tf.f, tf.bounds, maxiter=50)
-            print '[%s] found minimum %f.  declared minimum was %f.' % (tf.name, opt, tf.minimum)
+            print('[%s] found minimum %f.  declared minimum was %f.' % (tf.name, opt, tf.minimum))
             self.failUnlessAlmostEqual(opt, tf.minimum, 2)
             
     def testFunctionValues(self):
@@ -853,9 +830,9 @@ class TestGallery(unittest.TestCase):
         GP.addPreferences(prefs)
     
         gallery = fastUCBGallery(GP, tf.bounds, 4)
-        print 'gallery returned:'
+        print('gallery returned:')
         for x in gallery:
-            print '\t', x
+            print('\t', x)
             
         GP.addPreferences(query2prefs(gallery, tf.f))
         
@@ -863,9 +840,9 @@ class TestGallery(unittest.TestCase):
         bounds = copy(tf.bounds)
         bounds[0] = [0., 0.]
         gallery = fastUCBGallery(GP, bounds, 4)        
-        print 'gallery returned:'
+        print('gallery returned:')
         for x in gallery:
-            print '\t', x
+            print('\t', x)
             for v, b in zip(x, bounds):
                 self.failUnless(v>=b[0] and v<=b[1])
                 

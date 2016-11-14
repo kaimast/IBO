@@ -33,7 +33,6 @@ import pickle
 class Node(object):
 
     def __init__(self, X, Y, feature=None, value=None, m=None, label=None):
-        
         self.X = X
         self.Y = Y
         self.feature = feature
@@ -88,12 +87,12 @@ class RandomForest(object):
             self.Y = Y
             self.maxY = max(Y)
             
-            for x in xrange(self.ntrees):
+            for x in range(self.ntrees):
 
                 if self.doBagging:
                     thisX = []
                     thisY = []
-                    for _ in xrange(len(X)):
+                    for _ in range(len(X)):
                         s = randint(0, len(X))
                         thisX.append(X[s])
                         thisY.append(Y[s])
@@ -138,7 +137,7 @@ class RandomForest(object):
         mu = mean(labels)
         values = list(values)
         sig2 = var(values)
-        print mu, sig2, p
+        print(mu, sig2)
         assert isscalar(mu)
         assert isscalar(sig2)
         # assert isscalar(p)
@@ -215,7 +214,7 @@ class RandomForest(object):
         NX = len(X)
         NA = len(X[0])
         
-        for _ in xrange(self.m):
+        for _ in range(self.m):
             feature = numpyrandom.randint(NA)
             values = sorted(list(set(x[feature] for x in X)))
         
@@ -247,7 +246,6 @@ class RandomForest(object):
                     # deviance -= log(len(group), 2)
                     for y in group:
                         deviance += (mean-y)**2
-                    # print '\tdeviance =', deviance
         
             if deviance < bestDeviance:
                 bestFeature = feature
@@ -255,7 +253,6 @@ class RandomForest(object):
                 bestDeviance = deviance
         
         if bestDeviance > 10e9:
-            # print '%s: unable to find deviance better than %f' % (nodestring, bestDeviance)
             label = sum(Y) / len(Y)
             return Node(X, Y, label=label)
     
@@ -273,9 +270,6 @@ class RandomForest(object):
                 rightX.append(x)
                 rightY.append(y)
         
-        # print nodestring
-        # print '\tbest feature =', bestFeature
-        # print '\tbest value =', bestValue
         # print '\tsend %d data left, %d right' % (len(leftX), len(rightY))
         node.leftChild = self._trainNode(leftX, leftY, depth+1, nodestring+'->left')
         node.rightChild = self._trainNode(rightX, rightY, depth+1, nodestring+'->right')
@@ -290,7 +284,7 @@ def checkTree(tree):
     def checkNode(node, s):
         if node.isTerminal():
             assert node.label == sum(node.Y)/len(node.Y)
-            print '%s: label = %.3f'%(s, node.label)
+            print('%s: label = %.3f'%(s, node.label))
         else:
             checkNode(node.leftChild, s+', F%d < %.2f '% (node.feature, node.value))
             checkNode(node.rightChild, s+', F%d > %.2f '% (node.feature, node.value))

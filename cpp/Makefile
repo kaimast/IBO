@@ -29,7 +29,7 @@ LINK = g++
 
 ifeq ($(UNAME), Linux)
 RELEASE_FLAGS = -Wall
-RELEASE_LINKFLAGS =  -shared -W1,-soname,libego.so.1 
+RELEASE_LINKFLAGS =-shared
 endif
 ifeq ($(UNAME), Darwin)
 RELEASE_FLAGS = 

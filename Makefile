@@ -34,5 +34,9 @@ clean :
 	$(ECHO) cleaning up in .
 	-for d in $(DIRS); do (cd $$d; $(MAKE) clean ); done
 
+test:
+	./ego/unittest_RF.py
+	./ego/unittest_GP.py
+
 force_look :
 	true

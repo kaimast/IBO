@@ -1,4 +1,4 @@
-#!python
+#! /usr/bin/python3
 
 # Copyright (C) 2010, 2011 by Eric Brochu
 # 
@@ -23,7 +23,6 @@
 """
 Unittests for the EGO module go here.
 """
-from __future__ import division
 
 import unittest
 from math import sin
@@ -86,14 +85,12 @@ class TestGaussianProcess(unittest.TestCase):
         noise = 0.1
         
         gkernel = GaussianKernel_ard(hyper)
-        # print gkernel.sf2
         GP = GaussianProcess(gkernel, X, Y, noise=noise)
         
         # let's take a look at the trained GP.  first, make sure variance at
         # the samples is determined by noise
         mu, sig2 = GP.posteriors(X)
         for m, s, y in zip(mu, sig2, Y):
-            # print m, s
             self.failUnless(s < 1/(1+noise))
             self.failUnless(abs(m-y) < 2*noise)
         
@@ -129,12 +126,12 @@ class TestGaussianProcess(unittest.TestCase):
         for x, y in zip(X, Y):
             GP2.addData(x, y)
             
-        for i in xrange(0, 25, 5):
+        for i in range(0, 25, 5):
             GP3.addData(X[i:i+5], Y[i:i+5])
         
         GP4.addData(X[10], Y[10])
         GP4.addData(X[11:18], Y[11:18])
-        for i in xrange(18, 25):
+        for i in range(18, 25):
             GP4.addData(X[i], Y[i])
         
         
@@ -188,14 +185,14 @@ class TestHyper(unittest.TestCase):
         epsilon = .0001
         
         for i, (target, pder) in enumerate([(target0, pder0), (target1, pder1), (target2, pder2)]):
-            for j in xrange(4):
-                for k in xrange(4):
+            for j in range(4):
+                for k in range(4):
                     if abs(target[j, k]-pder[j, k]) > epsilon:
-                        print '\nelement [%d, %d] of pder%d differs from expected by > %f' % (j, k, i, epsilon)
-                        print '\ntarget:'
-                        print target
-                        print '\npder:'
-                        print pder
+                        print('\nelement [%d, %d] of pder%d differs from expected by > %f' % (j, k, i, epsilon))
+                        print('\ntarget:')
+                        print(target)
+                        print('\npder:')
+                        print(pder)
                         assert False
         
         # marginal likelihood and likelihood gradient
@@ -242,7 +239,7 @@ class TestHyper(unittest.TestCase):
         pder0 = gkernel.derivative(self.X, 0)
         pder1 = gkernel.derivative(self.X, 1)
         for i, (target, pder) in enumerate([(target0, pder0), (target1, pder1)]):
-            for j in xrange(4):
+            for j in range(4):
                 self.assertAlmostEqual(target[i,j], pder[i,j], 2)
             
         # optimize the marginal likelihood over the log hyperparameters 
@@ -459,8 +456,8 @@ class TestPreferences(unittest.TestCase):
              array([.2, .6, .1, .5])]
         
         GP = PrefGaussianProcess(GaussianKernel_iso(array([.1])))
-        for i in xrange(len(X)):
-            for j in xrange(i):
+        for i in range(len(X)):
+            for j in range(i):
                 if foo(X[i]) == foo(X[j]):
                     continue
                 elif foo(X[i]) > foo(X[j]):
@@ -469,8 +466,8 @@ class TestPreferences(unittest.TestCase):
                     p = [X[j], X[i], 0]
                 GP.addPreferences([p])
         
-        for i in xrange(len(GP.X)):
-            for j in xrange(i):
+        for i in range(len(GP.X)):
+            for j in range(i):
                 # print 'foo = %.1f, GP = %.3f vs foo = %.1f, GP = %.3f' % (foo(GP.X[i]), GP.Y[i], foo(GP.X[j]), GP.Y[j])
                 if foo(GP.X[i]) > foo(GP.X[j]):
                     self.failUnless(GP.mu(GP.X[i]) > GP.mu(GP.X[j]))
