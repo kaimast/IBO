@@ -20,34 +20,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#include <iostream>
 #include <cmath>
+#include <iostream>
 #include "direct.h"
-
 
 using namespace std;
 
 class FooClass{
-    
 public:
-    static void setTarget(float targ) 
+    static void setTarget(const double& targ) 
     {
         target = targ;
     }
-    static float foo(int n, float* x)
+
+    static double foo(int n, const double *x)
     {
-        float z = 0;
+        double z = 0;
         for (uint i = 0; i < n; i++)
         {
-            z += fabs(x[i]-target);
+            z += fabs(x[i] - target);
         }
         return z;
     }
 
-    static float target;
+    static double target;
 };
 
-float FooClass::target = 0;
+double FooClass::target = 0;
 
 int main()
 {
@@ -59,8 +58,10 @@ int main()
         ub[i] = 7;
     }
     FooClass::target = 5;
-    const double* dout = direct(&(FooClass::foo), 3, &lb[0], &ub[0], 10, 10, 1000);
+    double* dout = direct(&(FooClass::foo), 3, &lb[0], &ub[0], 10, 10, 1000);
     
     cout << "result = " << dout << endl;
+
+    free(dout);
     return 0;
 }

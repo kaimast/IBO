@@ -60,7 +60,7 @@ public:
     
     static double parm;
     
-    static void posterior(int ndim, double* x, double &mu, double &sigma)
+    static void posterior(int ndim, const double* x, double &mu, double &sigma)
     {
         double y = 0.0;
         set<double> ys;
@@ -140,7 +140,7 @@ public:
     }
     
     
-    static double negei(int ndim, double* x)
+    static double negei(int ndim, const double* x)
     {
         double mu;
         double sigma;
@@ -162,7 +162,7 @@ public:
     }
 
 
-    static double negpi(int ndim, double* x)
+    static double negpi(int ndim, const double* x)
     {
         double mu;
         double sigma;
@@ -175,7 +175,7 @@ public:
     }
 
 
-    static double negucb(int ndim, double* x)
+    static double negucb(int ndim, const double* x)
     {
         double mu;
         double sigma;

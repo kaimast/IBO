@@ -54,7 +54,7 @@ public:
     static double maxY;
     static double parm;
     
-    static void posterior(int ndim, double* x, double &mu, double &sigma)
+    static void posterior(int ndim, const double* x, double &mu, double &sigma)
     {
         // compute r, the distance from x to each datum
         // cout << "x = ";
@@ -191,7 +191,7 @@ public:
     }
 
 
-    static double negei(int ndim, double* x)
+    static double negei(int ndim, const double* x)
     {
         double mu;
         double sigma;
@@ -214,7 +214,7 @@ public:
         return -EI;
     }
 
-    static double negpi(int ndim, double* x)
+    static double negpi(int ndim, const double* x)
     {
         double mu;
         double sigma;
@@ -226,7 +226,7 @@ public:
         return -cdf;
     }
 
-    static double negucb(int ndim, double* x)
+    static double negucb(int ndim, const double* x)
     {
         double mu;
         double sigma;
@@ -348,7 +348,7 @@ acqmaxGP(int ndim,
     return dout;
 }
 
-extern "C" const double * testreturn(double* z, const int nz, double* res)
+extern "C" const double * testreturn(double* z, const int nz, const double* res)
 {
     double* d = (double*)malloc(sizeof(double)*nz);
     

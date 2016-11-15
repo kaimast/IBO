@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include <ctime>
 #include <iomanip>
 #include <fstream>
-#import <cassert>
+#include <cassert>
 #include "direct.h"
 
 using namespace std;
@@ -326,7 +326,7 @@ void test_coverage(const fvec& lower, const fvec& upper, const vector<Rectangle>
  * finish it's current rectangle division, so there will still be some 
  * time/samples that will be used before it returns.
  */
-extern "C" const double* direct(objective_t objective, int ndim, double* lb, double* ub, int maxiter, int maxtime, int maxsample)
+extern "C" double* direct(objective_t objective, int ndim, double* lb, double* ub, int maxiter, int maxtime, int maxsample)
 {
     time_t start = time(NULL);
     time_t lasttic = time(NULL);
@@ -575,7 +575,6 @@ extern "C" const double* direct(objective_t objective, int ndim, double* lb, dou
     if (DEBUG) cout << "[cdirect] s.str() = " << s.str() << endl;
     if (DEBUG) cout << "[cdirect] s.str().c_str() = " << s.str().c_str() << endl;
     
-    // return s.str().c_str();
     return res;
 }
 

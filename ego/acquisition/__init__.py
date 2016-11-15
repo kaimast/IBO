@@ -21,12 +21,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""
-acquisition.py
-
-Created by Eric on 2010-02-16.
-"""
-
 from numpy import array, sqrt, max, arange, log, nan, linalg, isscalar, pi
 from matplotlib.pylab import figure, subplot, poly_between, draw, show
 from ctypes import *
@@ -136,7 +130,6 @@ def maximizePI(model, bounds, xi=0.01, maxiter=50, maxtime=30, maxsample=10000, 
 
 
 class EI(object):
-    
     def __init__(self, GP, xi=.01, **kwargs):
         super(EI, self).__init__()
         self.GP = GP
@@ -148,7 +141,6 @@ class EI(object):
         
 
     def negf(self, x):
-        
         mu, sig2 = self.GP.posterior(x)
         assert isscalar(mu)
         assert isscalar(sig2)
@@ -222,7 +214,7 @@ def cdirectRF(model, bounds, maxiter, maxtime, maxsample, acqfunc=None, xi=-1, b
             data = array([x2ind[tuple(x)] for x in node.X])
             DATAARRAY = c_int * len(data)
             dataarray = DATAARRAY()
-            for i in xrange(len(data)):
+            for i in range(len(data)):
                 dataarray[i] = data[i]
             nodes.append(NODE(0, 0, node.label, -1, -1, len(data), dataarray))
             
@@ -238,7 +230,7 @@ def cdirectRF(model, bounds, maxiter, maxtime, maxsample, acqfunc=None, xi=-1, b
         
     NODEARRAY = NODE * len(nodes)
     narray = NODEARRAY()
-    for i in xrange(len(nodes)):
+    for i in range(len(nodes)):
         narray[i] = nodes[i]
     
     
@@ -466,7 +458,6 @@ def cdirectGP(model, bounds, maxiter, maxtime, maxsample, acqfunc=None, xi=-1, b
         
         
 def test():
-    
     GP = GaussianProcess(GaussianKernel_iso([.2, 1.0]))
     X = array([[.2], [.3], [.5], [1.5]])
     Y = [1, 0, 1, .75]

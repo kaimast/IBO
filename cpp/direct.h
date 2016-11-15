@@ -30,8 +30,7 @@ THE SOFTWARE.
 typedef std::vector<double> fvec;
 typedef unsigned int uint;
 typedef std::pair<uint, double> ind_val;
-typedef double(*objective_t)(int, double*);
-
+typedef double(*objective_t)(int, const double*);
 
 
 const double MAX_DOUBLE = std::numeric_limits<double>::max();
@@ -73,6 +72,6 @@ public:
     std::vector<bool> fixed;
 };
 
-extern "C" const double* direct(objective_t objective, int ndim, double* lb, double* ub, int maxiter, int maxtime, int maxsample);
+extern "C" double* direct(objective_t objective, int ndim, double* lb, double* ub, int maxiter, int maxtime, int maxsample);
 
 #endif
