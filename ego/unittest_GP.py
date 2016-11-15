@@ -21,7 +21,7 @@
 # THE SOFTWARE.
 
 """
-Unittests for the EGO module go here.
+Unittests for the gaussian processes go here.
 """
 
 import unittest
@@ -39,17 +39,11 @@ from acquisition.prefutil import query2prefs
 from utils.latinhypercube import lhcSample
 from gaussianprocess.trainhyper import marginalLikelihood, nlml, dnlml
 from utils.testfunctions import Poly4, Poly6, Schubert1, GoldsteinPrice, Shekel5, Camelback, Branin, Hartman3, Hartman6
-# from utils.performance import Gdelta
-# from optimize.direct import direct
-# from optimize.cdirect import cdirect
-
-
 
     
 class TestGaussianProcess(unittest.TestCase):
     
     def test1DGP(self):
-        
         f = lambda x: float(sin(x*5.))
         X = lhcSample([[0., 1.]], 5, seed=25)
         Y = [f(x) for x in X]
@@ -74,7 +68,6 @@ class TestGaussianProcess(unittest.TestCase):
 
 
     def testShekelClass(self):
-        
         S = Shekel5()
         
         # get 50 latin hypercube samples
@@ -104,7 +97,6 @@ class TestGaussianProcess(unittest.TestCase):
         
         
     def testTraining(self):
-        
         # test that sequential training gives the same result as batch
         
         tf = Shekel5()

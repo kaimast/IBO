@@ -1,7 +1,3 @@
-cmake_minimum_required(VERSION 2.6)
-
-project(ego)
-
 set(SOURCE_FILES direct.cpp optimizeGP.cpp optimizeRF.cpp helpers.cpp)
 
 add_library(ego SHARED ${SOURCE_FILES})

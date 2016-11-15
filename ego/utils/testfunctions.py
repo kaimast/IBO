@@ -269,7 +269,7 @@ class Hartman3(TestFunction):
         self.C = array([1, 1.2, 3, 3.2], dtype=float)
         
     def f(self, x):
-        y = -sum(self.C[i] * exp(-sum(self.A[i] * (x-self.B[i])**2)) for i in xrange(4))
+        y = -sum(self.C[i] * exp(-sum(self.A[i] * (x-self.B[i])**2)) for i in range(4))
         if self.maximize:
             return -y
         return y
@@ -296,7 +296,7 @@ class Hartman6(TestFunction):
         self.C = array([1, 1.2, 3, 3.2], dtype=float)
     
     def f(self, x):
-        y = -sum(self.C[i] * exp(-sum(self.A[i] * (x-self.B[i])**2)) for i in xrange(4))
+        y = -sum(self.C[i] * exp(-sum(self.A[i] * (x-self.B[i])**2)) for i in range(4))
         if self.maximize:
             return -y
         return y
@@ -451,7 +451,7 @@ class Zakharov(TestFunction):
 #     
 #     def f(self, x):
 #         fv = zeros(self.d)
-#         for i in xrange(1, (self.d//4)+1):
+#         for i in range(1, (self.d//4)+1):
 #             fv[4*i-4] = x[4*i-4] + 10*x[4*i-3]
 #             fv[4*i-3] = sqrt(5) * (x[4*i-2]-x[4*i-1])
 #             fv[4*i-2] = (x[4*i-3]-2*(x[4*i-2]))**2
@@ -557,8 +557,8 @@ def plot2D(tf):
     """
     # S2 = Synthetic(GaussianKernel_iso([.4]), [[-1,1]]*2, 15, xstar=[0,0])
     N = 50
-    c0 = [(i/N)*(tf.bounds[0][1]-tf.bounds[0][0])+tf.bounds[0][0] for i in xrange(N+1)]
-    c1 = [(i/N)*(tf.bounds[1][1]-tf.bounds[1][0])+tf.bounds[1][0] for i in xrange(N+1)]
+    c0 = [(i/N)*(tf.bounds[0][1]-tf.bounds[0][0])+tf.bounds[0][0] for i in range(N+1)]
+    c1 = [(i/N)*(tf.bounds[1][1]-tf.bounds[1][0])+tf.bounds[1][0] for i in range(N+1)]
     z = array([[tf.f(array([i,j])) for i in c0] for j in c1])
     figure(1)
     clf()

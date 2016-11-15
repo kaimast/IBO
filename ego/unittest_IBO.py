@@ -738,14 +738,14 @@ class TestDataprior(unittest.TestCase):
         self.failUnlessAlmostEqual(dopt, copt, 2)
         self.failUnlessAlmostEqual(-dopt, mopt, 2)
         
-        for i in xrange(len(GP.X)):
+        for i in range(len(GP.X)):
             self.failUnless(all(valX[i]==GP.X[i]))
             self.failUnless(valY[i]==GP.Y[i])
         
         GP.prior.mu(GP.X[0])
         self.failUnless(all(valX[0]==GP.X[0]))
         
-        for i in xrange(len(GP.X)):
+        for i in range(len(GP.X)):
             self.failUnless(all(valX[i]==GP.X[i]))
             self.failUnless(valY[i]==GP.Y[i])
         
@@ -805,14 +805,14 @@ class TestTestFunctions(unittest.TestCase):
         
         for TestFunction in TestFunctions:
             tf = TestFunction(maximize=False)
-            for i in xrange(100):
+            for i in range(100):
                 x = lhcSample(tf.bounds, 1, seed=i)[0]
                 self.failIf(tf.f(x) < tf.minimum)
                 
 
         for TestFunction in TestFunctions:
             tf = TestFunction(maximize=True)
-            for i in xrange(100):
+            for i in range(100):
                 x = lhcSample(tf.bounds, 1, seed=i)[0]
                 self.failIf(tf.f(x) > -tf.minimum)
 

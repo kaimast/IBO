@@ -1,3 +1,5 @@
+#!/usr/bin/python3 
+
 # Copyright (C) 2010, 2011 by Eric Brochu
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,7 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 # 
-#!/usr/bin/env python
 # encoding: utf-8
 """
 demo.py
@@ -73,9 +74,9 @@ def demoObservations():
          array([0, 0, .5])]
     Y = [1, .7, .6, -.1]
     
-    print 'adding data to model'
+    print('adding data to model')
     for x, y in zip(X, Y):
-        print '\tx = %s, y = %.1f' % (x, y)
+        print('\tx = %s, y = %.1f' % (x, y))
         
     GP.addData(X, Y)
     
@@ -87,7 +88,7 @@ def demoObservations():
     
     for tx in testX:
         mu, sig2 = GP.posterior(tx)
-        print 'the posterior of %s is a normal distribution N(%.3f, %.3f)' % (tx, mu, sig2)
+        print('the posterior of %s is a normal distribution N(%.3f, %.3f)' % (tx, mu, sig2))
         
     # now, let's find the best points to evaluate next.  we fix the first 
     # dimension to be 1 and for the others, we search the range [-2, 2]
@@ -105,8 +106,8 @@ def demoObservations():
         ei = zeros_like(X1)
         m = zeros_like(X1)
         v = zeros_like(X1)
-        for i in xrange(X1.shape[0]):
-            for j in xrange(X1.shape[1]):
+        for i in range(X1.shape[0]):
+            for j in range(X1.shape[1]):
                 z = array([1.0, X1[i,j], X2[i,j]])
                 ei[i,j] = -EI(GP).negf(z)
                 m[i,j], v[i,j] = GP.posterior(z)
@@ -132,7 +133,7 @@ def demoObservations():
         except:
             break
         GP.addData(optx, response)
-        print 'updating model.'
+        print('updating model.')
 
 
 def demoPrefGallery():
@@ -165,7 +166,7 @@ def demoPrefGallery():
     # preferences have the form [r, c, degree], where r is preferred to c.  
     # degree is degree of preference.  Just leave degree at 0 for now.
     for r, c, _ in prefs:
-        print '%s preferred to %s' % (r, c)
+        print('%s preferred to %s' % (r, c))
         
     # add preferences to the model
     GP.addPreferences(prefs)
@@ -177,7 +178,7 @@ def demoPrefGallery():
     gallery = fastUCBGallery(GP, nbounds, N)
     prefs = query2prefs(gallery, tf.f)
     for r, c, _ in prefs:
-        print '%s preferred to %s' % (r, c)
+        print('%s preferred to %s' % (r, c))
     
     # get another gallery, but with the *last* three dimensions fixed to .5
     nbounds = deepcopy(bounds)
@@ -186,7 +187,7 @@ def demoPrefGallery():
     gallery = fastUCBGallery(GP, nbounds, N)
     prefs = query2prefs(gallery, tf.f)
     for r, c, _ in prefs:
-        print '%s preferred to %s' % (r, c)
+        print('%s preferred to %s' % (r, c))
     
     # preferences don't have to come from the gallery
     r = array([0, 0, .5, 0, 1, .25])
