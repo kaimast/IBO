@@ -39,6 +39,25 @@ from ego.acquisition import UCB, EI, maximizeEI
 
 DEBUG = False
 
+def findBest(GP, bounds):
+    assert len(GP.X) > 0
+
+    # find best sample already seen, that lies within the bounds
+    bestY = -inf
+    bestX = None
+    for x, y in zip(GP.X, GP.Y):
+        if y > bestY:
+             for v, b in zip(x, bounds):
+                 if v < b[0] or v > b[1]:
+                     break
+                 else:
+                     bestY = y
+                     bestX = x
+
+    #assert bestX is not None
+    return bestX
+ 
+
 def fastUCBGallery(GP, bounds, N, useBest=True, samples=300, useCDIRECT=True):
     """
     Use UCB to generate a gallery of N instances using Monte Carlo to 

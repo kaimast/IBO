@@ -197,6 +197,6 @@ def demoPrefGallery():
     
 
 if __name__ == '__main__':
-    demoObservations()
-    # demoPrefGallery()
+    #demoObservations()
+    demoPrefGallery()
 
